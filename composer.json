@@ -1,0 +1,34 @@
+{
+    "name": "kodeops/prado",
+    "type": "library",
+    "description": "Wrapper for Prado CDN service",
+    "keywords": ["kodeops", "prado", "nft", "cdn"],
+    "homepage": "https://github.com/kodeops/prado",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kodeops",
+            "email": "hello@kodeops.io",
+            "homepage": "https://kodeops.io",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": "^7|^8",
+        "spatie/laravel-package-tools": "^1.6.2",
+        "league/flysystem-aws-s3-v3": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "kodeops\\prado\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "kodeops\\Prado\\PradoServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
