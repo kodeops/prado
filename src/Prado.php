@@ -7,6 +7,9 @@ use kodeops\Prado\Exceptions\PradoException;
 
 class Prado
 {
+    protected $token;
+    protected $endpoint;
+
     protected $token_id;
     protected $blockchain;
     protected $contract;
@@ -19,6 +22,17 @@ class Prado
 
     public function __construct($token_id, $failsafe = true)
     {
+        if (is_null(env('PRADO_API_TOKEN'))) {
+            throw new PradoException("Missing PRADO_API_TOKEN");
+        }
+        $this->token = env('PRADO_API_TOKEN');
+
+
+        if (is_null(env('PRADO_ENDPOINT'))) {
+            throw new PradoException("Missing PRADO_ENDPOINT");
+        }
+        $this->endpoint = env('PRADO_ENDPOINT');
+
         $this->token_id = $token_id;
         $this->failsafe = $failsafe;
 
@@ -83,7 +97,8 @@ class Prado
             return $cache_exists;
         }
 
-        $response = Http::get($this->endpoint() . '/api/1/token?' . http_build_query($params));
+        $response = Http::withToken($this->api_token)
+            ->get($this->endpoint . '/api/1/token?' . http_build_query($params));
 
         if ($response->failed()) {
             if ($this->failsafe) {
@@ -98,14 +113,5 @@ class Prado
         Cache::put($cache_key, $url);
 
         return $url;
-    }
-
-    private function endpoint()
-    {
-        if (is_null(env('PRADO_ENDPOINT'))) {
-            throw new PradoException('PRADO_ENDPOINT not defined');
-        }
-
-        return env('PRADO_ENDPOINT');
     }
 }
