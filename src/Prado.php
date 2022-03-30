@@ -7,7 +7,7 @@ use kodeops\Prado\Exceptions\PradoException;
 
 class Prado
 {
-    protected $token;
+    protected $api_token;
     protected $endpoint;
 
     protected $token_id;
@@ -25,7 +25,7 @@ class Prado
         if (is_null(env('PRADO_API_TOKEN'))) {
             throw new PradoException("Missing PRADO_API_TOKEN");
         }
-        $this->token = env('PRADO_API_TOKEN');
+        $this->api_token = env('PRADO_API_TOKEN');
 
 
         if (is_null(env('PRADO_ENDPOINT'))) {
