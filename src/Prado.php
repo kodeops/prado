@@ -15,7 +15,7 @@ class Prado
     protected $contract;
     protected $width;
     protected $height;
-    protected $mantain_aspect_ratio;
+    protected $maintain_aspect_ratio;
 
     protected $method;
     protected $failsafe;
@@ -37,7 +37,7 @@ class Prado
         $this->failsafe = $failsafe;
 
         // Default settings
-        $this->mantain_aspect_ratio = true;
+        $this->maintain_aspect_ratio = 1;
     }
 
     public static function nft($token_id)
@@ -70,6 +70,12 @@ class Prado
         return $this;
     }
 
+    public function maintainAspectRatio(bool $maintain_aspect_ratio)
+    {
+        $this->maintain_aspect_ratio = $maintain_aspect_ratio;
+        return $this;
+    }
+
     public function url()
     {
         switch ($this->method) {
@@ -84,11 +90,17 @@ class Prado
         $params = [
             'blockchain' => $this->blockchain,
             'contract' => $this->contract,
-            'width' => $this->width,
-            'height' => $this->height,
             'token_id' => $this->token_id,
-            'mantain_aspect_ratio' => $this->mantain_aspect_ratio,
+            'maintain_aspect_ratio' => $this->maintain_aspect_ratio,
         ];
+
+        if ($this->width) {
+            $params['width'] = $this->width;
+        }
+
+        if ($this->height) {
+            $params['height'] = $this->height;
+        }
 
         // Check cache existance
         $cache_key = 'prado.' . sha1(json_encode($params));
