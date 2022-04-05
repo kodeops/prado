@@ -16,6 +16,7 @@ class Prado
     protected $width;
     protected $height;
     protected $mode;
+    protected $author;
 
     protected $method;
     protected $failsafe;
@@ -75,6 +76,10 @@ class Prado
         $this->mode = $mode;
         return $this;
     }
+
+    public function author(string $author)
+    {
+        $this->author = $author;
         return $this;
     }
 
@@ -95,6 +100,10 @@ class Prado
             'token_id' => $this->token_id,
             'mode' => $this->mode,
         ];
+
+        if ($this->author) {
+            $params['author'] = $this->author;
+        }
 
         if ($this->width) {
             $params['width'] = $this->width;
