@@ -53,6 +53,12 @@ class Prado
         return $this;
     }
 
+    public function failsafe($failsafe)
+    {
+        $this->failsafe = $failsafe;
+        return $this;
+    }
+
     public function contract($contract)
     {
         $this->contract = $contract;
