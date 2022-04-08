@@ -17,6 +17,7 @@ class Prado
     protected $height;
     protected $mode;
     protected $author;
+    protected $quality;
 
     protected $method;
     protected $failsafe;
@@ -77,6 +78,12 @@ class Prado
         return $this;
     }
 
+    public function quality(int $quality)
+    {
+        $this->quality = $quality;
+        return $this;
+    }
+
     public function mode(string $mode)
     {
         $this->mode = $mode;
@@ -117,6 +124,10 @@ class Prado
 
         if ($this->height) {
             $params['height'] = $this->height;
+        }
+
+        if ($this->quality) {
+            $params['quality'] = $this->quality;
         }
 
         // Check cache existance
