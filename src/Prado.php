@@ -96,11 +96,16 @@ class Prado
         return $this;
     }
 
+    public function token()
+    {
+        return $this->resolveNft();
+    }
+
     public function url()
     {
         switch ($this->method) {
             case 'nft':
-                return $this->resolveNft();
+                return $this->resolveNft()['url'];
             break;
         }
     }
@@ -145,13 +150,21 @@ class Prado
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
             }
 
-            throw new PradoException("Error Processing Request");
+            throw new PradoException("Error processing request for token {$this->token_id} ({$this->blockchain})");
         }
 
-        $url = rro($response->json())->getData('url');
+        $data = $response->json();
 
-        Cache::put($cache_key, $url);
+        if (is_rro($data)) {
+            if (rro($data)->isError()) {
+                throw new PradoException("Error Processing Request");
+            }
+        }
 
-        return $url;
+        $data = $data['response']['data'];
+
+        Cache::put($cache_key, $data);
+
+        return $data;
     }
 }
