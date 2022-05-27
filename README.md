@@ -108,3 +108,6 @@ For most common contracts in Tezos, you can use the alias available:
 * rarible `KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS`
 * versum `KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW`
 * fxhash `KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE`
+* knwonworigin `0xd52f40f2d422fad4a1cb9666e58f080d69f7de39`
+* foundation `0x3b3ee1931dc30c1957379fac9aba94d1c48a5405`
+* solana `solana`
