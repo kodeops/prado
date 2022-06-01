@@ -29,7 +29,6 @@ class Prado
         }
         $this->api_token = env('PRADO_API_TOKEN');
 
-
         if (is_null(env('PRADO_ENDPOINT'))) {
             throw new PradoException("Missing PRADO_ENDPOINT");
         }
@@ -150,7 +149,7 @@ class Prado
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
             }
 
-            throw new PradoException("Error processing request for token {$this->token_id} ({$this->blockchain})");
+            throw new PradoException("Error processing request for token {$this->token_id} ({$this->blockchain}): " . $response->body());
         }
 
         $data = $response->json();
