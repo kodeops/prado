@@ -21,6 +21,7 @@ class Prado
 
     protected $method;
     protected $failsafe;
+    protected $timeout;
 
     public function __construct($token_id, $failsafe = true)
     {
@@ -53,25 +54,31 @@ class Prado
         return $this;
     }
 
-    public function failsafe($failsafe)
+    public function failsafe(bool $failsafe)
     {
         $this->failsafe = $failsafe;
         return $this;
     }
 
-    public function contract($contract)
+    public function timeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    public function contract(string $contract)
     {
         $this->contract = $contract;
         return $this;
     }
 
-    public function width($width)
+    public function width(int $width)
     {
         $this->width = $width;
         return $this;
     }
 
-    public function height($height)
+    public function height(int $height)
     {
         $this->height = $height;
         return $this;
@@ -141,7 +148,8 @@ class Prado
             return $cache_exists;
         }
 
-        $response = Http::withToken($this->api_token)
+        $response = Http::timeout($this->timeout ?? 30)
+            ->withToken($this->api_token)
             ->get($this->endpoint . '/api/1/token?' . http_build_query($params));
 
         if ($response->failed()) {
