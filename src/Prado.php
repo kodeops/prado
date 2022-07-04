@@ -137,8 +137,13 @@ class Prado
             return $cache_exists;
         }
 
-        $response = Http::withToken($this->api_token)
-            ->get($this->endpoint . '/api/1/token?' . http_build_query($params));
+        url = $this->endpoint . '/api/1/pin/token?' . http_build_query($params);
+
+        $response = Http::withToken($this->api_token)->get($url);
+
+        if ($response->status() == 404) {
+            throw new PradoException("Endpoint not found! Please check that PRADO_ENDPOINT is set in the environment file.");
+        }
 
         if ($response->failed()) {
             if ($this->failsafe) {
