@@ -21,6 +21,7 @@ class Prado
 
     protected $method;
     protected $failsafe;
+    protected $timeout;
 
     public function __construct($token_id, $failsafe = true)
     {
@@ -28,7 +29,6 @@ class Prado
             throw new PradoException("Missing PRADO_API_TOKEN");
         }
         $this->api_token = env('PRADO_API_TOKEN');
-
 
         if (is_null(env('PRADO_ENDPOINT'))) {
             throw new PradoException("Missing PRADO_ENDPOINT");
@@ -54,25 +54,31 @@ class Prado
         return $this;
     }
 
-    public function failsafe($failsafe)
+    public function failsafe(bool $failsafe)
     {
         $this->failsafe = $failsafe;
         return $this;
     }
 
-    public function contract($contract)
+    public function timeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    public function contract(string $contract)
     {
         $this->contract = $contract;
         return $this;
     }
 
-    public function width($width)
+    public function width(int $width)
     {
         $this->width = $width;
         return $this;
     }
 
-    public function height($height)
+    public function height(int $height)
     {
         $this->height = $height;
         return $this;
@@ -96,11 +102,16 @@ class Prado
         return $this;
     }
 
+    public function token()
+    {
+        return $this->resolveNft();
+    }
+
     public function url()
     {
         switch ($this->method) {
             case 'nft':
-                return $this->resolveNft();
+                return $this->resolveNft()['url'];
             break;
         }
     }
@@ -137,9 +148,9 @@ class Prado
             return $cache_exists;
         }
 
-        url = $this->endpoint . '/api/1/pin/token?' . http_build_query($params);
+        $url = $this->endpoint . '/api/1/pin/token?' . http_build_query($params);
 
-        $response = Http::withToken($this->api_token)->get($url);
+        $response = Http::timeout($this->timeout ?? 30)->withToken($this->api_token)->get($url);
 
         if ($response->status() == 404) {
             throw new PradoException("Endpoint not found! Please check that PRADO_ENDPOINT is set in the environment file.");
@@ -150,13 +161,21 @@ class Prado
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
             }
 
-            throw new PradoException("Error Processing Request");
+            throw new PradoException("Error processing request for token {$this->token_id} ({$this->blockchain}): " . $response->body());
         }
 
-        $url = rro($response->json())->getData('url');
+        $data = $response->json();
 
-        Cache::put($cache_key, $url);
+        if (is_rro($data)) {
+            if (rro($data)->isError()) {
+                throw new PradoException("Error Processing Request: Invalid response format.");
+            }
+        }
 
-        return $url;
+        $data = $data['response']['data'];
+
+        Cache::put($cache_key, $data);
+
+        return $data;
     }
 }
