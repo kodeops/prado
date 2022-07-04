@@ -32,6 +32,21 @@ section below)
 *  `mode` Resize mode (`maintain_aspect_ratio`, `fit` and `framed`)
 *  `author` Author of the request (for analytics purposes)
 
+## Supported marketplaces
+
+With these marketplaces you can use the method `url` to avoid specifying `blockchain`, `contract` and `token_id`.
+
+* opensea.io
+* hicetnunc.xyz
+* hicetnunc.art
+* teia.art
+* henext.xyz
+* hic.af
+* versum.xyz
+* rarible.com
+* objkt.com
+
+
 ## Usage
 
 You can use the facade for quick access to NFT:
