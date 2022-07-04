@@ -49,6 +49,22 @@ With these marketplaces you can use the method `url` to avoid specifying `blockc
 
 ## Usage
 
+Using the marketplace URL:
+
+```
+
+use kodeops\Prado\Prado;
+
+$url = Prado::url('https://www.henext.xyz/o/500787')
+    ->width(1200)
+    ->height(1200)
+    ->quality(75)
+    ->author('xp.lo.it')
+    ->url();
+
+// https://pradocdn.s3.eu-central-1.amazonaws.com/tezos/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton/500787/500787_1200x1200-maintain_aspect_ratio-90.jpeg     
+```
+
 You can use the facade for quick access to NFT:
 
 ```
