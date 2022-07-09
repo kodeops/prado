@@ -222,7 +222,7 @@ class Prado
             break;
 
             default:
-                Cache::put("prado.{$hash}", $data);
+                Cache::put("prado.{$this->cache_key}", $data);
             break;
         }
     }
