@@ -4,6 +4,7 @@ namespace kodeops\Prado;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use kodeops\Prado\Exceptions\PradoException;
+use kodeops\Prado\Models\CachedToken;
 
 class Prado
 {
@@ -22,6 +23,9 @@ class Prado
     protected $method;
     protected $failsafe;
     protected $timeout;
+    
+    protected $cache_driver;
+    protected $cache_key;
 
     public function __construct($token_id, $failsafe = true)
     {
@@ -35,11 +39,37 @@ class Prado
         }
         $this->endpoint = env('PRADO_ENDPOINT');
 
+        $this->setupCacheDriver();
+
         $this->token_id = $token_id;
         $this->failsafe = $failsafe;
 
         // Default settings
         $this->mode = 'maintain_aspect_ratio';
+    }
+
+    private function setupCacheDriver()
+    {
+        if (is_null(env('PRADO_CACHE_DRIVER'))) {
+            $this->cache_driver = env('CACHE_DRIVER');
+        } else {
+            if (! in_array(env('PRADO_CACHE_DRIVER'), $this->supportedCacheDrivers())) {
+                throw new PradoException("Invalid PRADO_CACHE_DRIVER");
+            }
+
+            $this->cache_driver = env('PRADO_CACHE_DRIVER');
+
+            switch ($this->cache_driver) {
+                case 'mysql':
+                break;
+            }
+        }
+        $this->endpoint = env('PRADO_ENDPOINT');
+    }
+
+    private function supportedCacheDrivers()
+    {
+        return ['mysql'];
     }
 
     public static function nft($token_id)
@@ -141,11 +171,9 @@ class Prado
             $params['quality'] = $this->quality;
         }
 
-        // Check cache existance
-        $cache_key = 'prado.' . sha1(json_encode($params));
-        $cache_exists = Cache::get($cache_key);
-        if ($cache_exists) {
-            return $cache_exists;
+        $tokenIsCached = $this->checkIfTokenIsCached($params);
+        if ($tokenIsCached) {
+            return $tokenIsCached;
         }
 
         $url = $this->endpoint . '/api/1/pin/token?' . http_build_query($params);
@@ -161,7 +189,7 @@ class Prado
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
             }
 
-            throw new PradoException("Error processing request for token {$this->token_id} ({$this->blockchain}): " . $response->body());
+            throw new PradoException("Error {$response->status()} processing request for token {$this->token_id} in contract {$this->contract} at {$this->blockchain} blockchain. Response: " . $response->body());
         }
 
         $data = $response->json();
@@ -174,8 +202,48 @@ class Prado
 
         $data = $data['response']['data'];
 
-        Cache::put($cache_key, $data);
-
+        $this->cacheToken($data);
+        
         return $data;
+    }
+
+    private function cacheToken(array $data)
+    {
+        switch ($this->cache_driver) {
+            case 'mysql':
+                CachedToken::create([
+                    'pin' => $data['alias'],
+                    'hash' => $this->cache_key,
+                    'blockchain' => $this->blockchain,
+                    'contract' => $this->contract,
+                    'token_id' => $this->token_id,
+                    'metadata' => $data,
+                ]);
+            break;
+
+            default:
+                Cache::put("prado.{$hash}", $data);
+            break;
+        }
+    }
+
+    private function checkIfTokenIsCached(array $params)
+    {
+        $this->cache_key = sha1(json_encode($params));
+
+        switch ($this->cache_driver) {
+            case 'mysql':
+                $cache_exists = CachedToken::where('hash', $this->cache_key)->first();
+                if ($cache_exists) {
+                    return $cache_exists->metadata;
+                }
+            break;
+
+            default:
+                return Cache::get("prado.{$this->cache_key}");
+            break;
+        }
+
+        return false;
     }
 }
