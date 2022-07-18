@@ -49,6 +49,8 @@ With these marketplaces you can use the method `url` to avoid specifying `blockc
 * versum.xyz
 * rarible.com
 * objkt.com
+* artblocks.io
+* tender.art
 
 
 ## Usage
