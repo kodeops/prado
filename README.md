@@ -19,6 +19,7 @@ This package provides a simple to use wrapper for the prado service.
 * Add api token to environment file:
 
 `PRADO_API_TOKEN=<token>`
+
 `PRADO_ENDPOINT=https://prado.link`
 
 For some custom setups the `PRADO_ENDPOINT` may change. Use the default `https://prado.link` unless stated otherwise.
