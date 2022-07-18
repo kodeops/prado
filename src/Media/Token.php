@@ -140,7 +140,7 @@ class Token
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
             }
 
-            throw new PradoException("Error {$request->response('code')} processing request for token {$this->token_id} in contract {$this->contract} at {$this->blockchain} blockchain. Response: " . $request->body());
+            throw new PradoException("Error {$request->response('code')} processing request for token {$this->token_id} in contract {$this->contract} at {$this->blockchain} blockchain. Response: {$request->response('message')}");
         }
 
         $token = $request->response('data');
