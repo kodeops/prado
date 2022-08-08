@@ -29,9 +29,16 @@ class Token
     {
         $this->pradoRequest = new PradoRequest();
         $this->token_id = $token_id;
+        $this->timeout = 180;
 
         // Default settings
         $this->mode = 'maintain_aspect_ratio';
+    }
+
+    public function timeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
     }
 
     public function failsafe(bool $failsafe)
@@ -133,7 +140,9 @@ class Token
             return $tokenIsCached;
         }
 
-        $request = $this->pradoRequest->get('api/1/pin/token', $params);
+        $request = $this->pradoRequest
+            ->timeout($this->timeout)
+            ->get('api/1/pin/token', $params);
 
         if ($request->isError()) {
             if ($this->failsafe) {
