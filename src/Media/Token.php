@@ -15,7 +15,6 @@ class Token
     protected $height;
     protected $mode;
     protected $author;
-    protected $quality;
 
     protected $cache_driver;
     protected $cache_key;
@@ -92,12 +91,6 @@ class Token
         return $this;
     }
 
-    public function quality(int $quality)
-    {
-        $this->quality = $quality;
-        return $this;
-    }
-
     public function mode(string $mode)
     {
         $this->mode = $mode;
@@ -129,10 +122,6 @@ class Token
 
         if ($this->height) {
             $params['height'] = $this->height;
-        }
-
-        if ($this->quality) {
-            $params['quality'] = $this->quality;
         }
 
         $tokenIsCached = $this->checkIfTokenIsCached($params);

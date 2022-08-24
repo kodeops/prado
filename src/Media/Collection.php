@@ -15,8 +15,8 @@ class Collection
         $this->collection_alias = $collection_alias;
     }
 
-    public function collectible(string $collectible_alias)
+    public function collectible(string $artifact_alias)
     {
-        return new Media\Collectible($this->collection_alias, $collectible_alias);
+        return new Media\Artifact($this->collection_alias, $artifact_alias);
     } 
 }
