@@ -6,19 +6,17 @@ use kodeops\Prado\PradoRequest;
 
 class Artifact
 {
-    protected $organisational_unit_alias;
     protected $artifact_alias;
 
-    public function __construct(string $organisational_unit_alias, string $artifact_alias = null)
+    public function __construct(string $artifact_alias = null)
     {
         $this->pradoRequest = new PradoRequest();
-        $this->organisational_unit_alias = $organisational_unit_alias;
         $this->artifact_alias = $artifact_alias;
     }
 
-    public function get(array $params)
+    public function get(string $organisational_unit_alias, array $params)
     {
-        $params['organisational_unit'] = $this->organisational_unit_alias;
+        $params['organisational_unit'] = $organisational_unit_alias;
         return $this->pradoRequest->post("api/1/artifacts", $params);
     }
 

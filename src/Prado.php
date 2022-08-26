@@ -18,6 +18,16 @@ class Prado
 
     public static function collection(string $collection_alias)
     {
-        return new Media\Collection($collection_alias);
+        return new Media\OrganisationalUnit($collection_alias);
+    }    
+
+    public static function project(string $project_alias)
+    {
+        return new Media\OrganisationalUnit($project_alias);
+    }    
+
+    public static function artifact(string $artifact_alias)
+    {
+        return new Media\Artifact($artifact_alias);
     }    
 }
