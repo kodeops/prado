@@ -32,6 +32,7 @@ class Token
 
         // Default settings
         $this->mode = 'maintain_aspect_ratio';
+        $this->setupCacheDriver();
     }
 
     public function timeout(int $timeout)
@@ -124,6 +125,8 @@ class Token
             $params['height'] = $this->height;
         }
 
+        $this->cache_key = sha1(json_encode($params));
+
         $tokenIsCached = $this->checkIfTokenIsCached($params);
         if ($tokenIsCached) {
             return $tokenIsCached;
@@ -144,7 +147,6 @@ class Token
         $token = $request->response('data');
 
         $this->cacheToken($token);
-        
         return $token;
     }
 
@@ -152,14 +154,14 @@ class Token
     {
         switch ($this->cache_driver) {
             case 'mysql':
-                CachedToken::create([
-                    'pin' => $data['alias'],
+                $cache = [
                     'hash' => $this->cache_key,
                     'blockchain' => $this->blockchain,
                     'contract' => $this->contract,
                     'token_id' => $this->token_id,
                     'metadata' => $data,
-                ]);
+                ];
+                CachedToken::updateOrInsert(['pin' => $data['alias']], $cache);
             break;
 
             default:
@@ -170,8 +172,7 @@ class Token
 
     private function checkIfTokenIsCached(array $params)
     {
-        $this->cache_key = sha1(json_encode($params));
-
+        //$params = collect($params)->only(['blockchain', 'contract', 'token_id', 'mode', 'width', 'height'])->toArray();
         switch ($this->cache_driver) {
             case 'mysql':
                 $cache_exists = CachedToken::where('hash', $this->cache_key)->first();
@@ -198,13 +199,7 @@ class Token
             }
 
             $this->cache_driver = env('PRADO_CACHE_DRIVER');
-
-            switch ($this->cache_driver) {
-                case 'mysql':
-                break;
-            }
         }
-        $this->endpoint = env('PRADO_ENDPOINT');
     }
 
     private function supportedCacheDrivers()
