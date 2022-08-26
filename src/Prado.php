@@ -2,6 +2,7 @@
 namespace kodeops\Prado;
 
 use kodeops\Prado\Media;
+use kodeops\Prado\Pin;
 use kodeops\Prado\Exceptions\PradoException;
 
 class Prado
@@ -26,7 +27,7 @@ class Prado
         switch ($origin)
         {
             case 'token':
-                return new Media\Token();
+                return new Pin\Token();
             break;
 
             case 'marketplace_url':
@@ -53,6 +54,6 @@ class Prado
     /* Alias to support old calls */
     public static function token(string $token_id)
     {
-        return new Media\Token($token_id);
+        return new Media\Pin($token_id);
     }
 }

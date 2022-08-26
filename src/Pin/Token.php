@@ -1,5 +1,5 @@
 <?php
-namespace kodeops\Prado\Media;
+namespace kodeops\Prado\Pin;
 
 use kodeops\Prado\Models\CachedPin;
 use Illuminate\Support\Facades\Cache;
