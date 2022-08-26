@@ -24,12 +24,20 @@ class Artifact
 
     public function tags(array $tags)
     {
+        if (! $this->artifact_alias) {
+            throw new PradoException("Can't tag artifact: The artifact alias must be specified.");
+        }
+
         $params = ['tags' => implode(',', $tags)];
         return $this->pradoRequest->post("api/1/artifact/{$this->artifact_alias}/tags", $params);
     }
 
     public function metadata(array $metadata)
     {
+        if (! $this->artifact_alias) {
+            throw new PradoException("Can't add metadata: The artifact alias must be specified.");
+        }
+
         $params = ['metadata' => json_encode($metadata)];
         return $this->pradoRequest->post("api/1/artifact/{$this->artifact_alias}/metadata", $params);
     }
