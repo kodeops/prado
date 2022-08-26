@@ -24,7 +24,7 @@ class Token
     protected $timeout;
     protected $pradoRequest;
 
-    public function __construct(string $token_id)
+    public function __construct(string $token_id = null)
     {
         $this->pradoRequest = new PradoRequest();
         $this->token_id = $token_id;
@@ -33,6 +33,12 @@ class Token
         // Default settings
         $this->mode = 'maintain_aspect_ratio';
         $this->setupCacheDriver();
+    }
+
+    public function tokenId(string $token_id)
+    {
+        $this->token_id = $token_id;
+        return $this;
     }
 
     public function timeout(int $timeout)

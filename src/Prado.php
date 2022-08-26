@@ -2,20 +2,10 @@
 namespace kodeops\Prado;
 
 use kodeops\Prado\Media;
+use kodeops\Prado\Exceptions\PradoException;
 
 class Prado
 {
-    /* Alias to support old calls */
-    public static function nft(string $token_id)
-    {
-        return self::token($token_id);
-    }
-
-    public static function token(string $token_id)
-    {
-        return new Media\Token($token_id);
-    }
-
     public static function collection(string $collection_alias)
     {
         return new Media\OrganisationalUnit($collection_alias);
@@ -29,5 +19,40 @@ class Prado
     public static function artifact(string $artifact_alias)
     {
         return new Media\Artifact($artifact_alias);
-    }    
+    }
+
+    public static function pin(string $origin)
+    {
+        switch ($origin)
+        {
+            case 'token':
+                return new Media\Token();
+            break;
+
+            case 'marketplace_url':
+            break;
+
+            case 'url':
+            break;
+
+            case 'ipfs':
+            break;
+
+            default:
+                throw new PradoException("Invalid pin origin: {$origin}");
+            break;
+        }
+    }
+
+    /* Alias to support old calls */
+    public static function nft(string $token_id)
+    {
+        return self::token($token_id);
+    }
+
+    /* Alias to support old calls */
+    public static function token(string $token_id)
+    {
+        return new Media\Token($token_id);
+    }
 }
