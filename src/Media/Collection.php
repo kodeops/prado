@@ -19,4 +19,9 @@ class Collection
     {
         return new Media\Artifact($this->collection_alias, $artifact_alias);
     } 
+    public function artifacts(array $params = [])
+    {
+        $params['organisational_unit'] = $this->collection_alias;
+        return (new Media\Artifact($this->collection_alias))->get($params);
+    } 
 }
