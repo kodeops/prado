@@ -127,15 +127,14 @@ class Token
 
         $this->cache_key = sha1(json_encode($params));
 
-        $tokenIsCached = $this->checkIfTokenIsCached($params);
-        if ($tokenIsCached) {
-            return $tokenIsCached;
+        $pinIsCached = $this->checkIfPinIsCached($params);
+        if ($pinIsCached) {
+            return $pinIsCached;
         }
 
         $request = $this->pradoRequest
             ->timeout($this->timeout)
             ->get('api/1/pin/token', $params);
-
         if ($request->isError()) {
             if ($this->failsafe) {
                 return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
@@ -146,22 +145,31 @@ class Token
 
         $token = $request->response('data');
 
-        $this->cacheToken($token);
+        $this->cachePin($token);
+
         return $token;
     }
 
-    private function cacheToken(array $data)
+    private function cachePin(array $pin)
     {
         switch ($this->cache_driver) {
             case 'mysql':
-                $cache = [
+                $pin_params = [
                     'hash' => $this->cache_key,
                     'blockchain' => $this->blockchain,
                     'contract' => $this->contract,
                     'token_id' => $this->token_id,
-                    'metadata' => $data,
+                    'metadata' => $pin,
                 ];
-                CachedPin::updateOrInsert(['pin' => $data['alias']], $cache);
+                $cachedPin = CachedPin::where('pin', $pin['alias'])->first();
+                if ($cachedPin) {
+                    // This is a tricky situation.
+                    // According to the hash strategy, a
+                    $cachedPin->update($pin_params);
+                } else {
+                    $pin_params['pin'] = $pin['alias'];
+                    CachedPin::create($pin_params);
+                }
             break;
 
             default:
@@ -170,9 +178,8 @@ class Token
         }
     }
 
-    private function checkIfTokenIsCached(array $params)
+    private function checkIfPinIsCached(array $params)
     {
-        //$params = collect($params)->only(['blockchain', 'contract', 'token_id', 'mode', 'width', 'height'])->toArray();
         switch ($this->cache_driver) {
             case 'mysql':
                 $cache_exists = CachedPin::where('hash', $this->cache_key)->first();
