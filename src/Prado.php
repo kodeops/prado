@@ -48,12 +48,12 @@ class Prado
     /* Alias to support old calls */
     public static function nft(string $token_id)
     {
-        return $this->pin('token')->tokenId($token_id);
+        return self::pin('token')->tokenId($token_id);
     }
 
     /* Alias to support old calls */
     public static function token(string $token_id)
     {
-        return $this->pin('token')->tokenId($token_id);
+        return self::pin('token')->tokenId($token_id);
     }
 }
