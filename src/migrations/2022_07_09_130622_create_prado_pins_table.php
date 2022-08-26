@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prado_tokens', function (Blueprint $table) {
+        Schema::create('prado_pins', function (Blueprint $table) {
             $table->id();
             $table->string('pin', 6)->unique()->index();
             $table->string('hash', 160)->unique()->index();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prado_tokens');
+        Schema::dropIfExists('prado_pins');
     }
 };

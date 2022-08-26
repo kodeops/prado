@@ -3,9 +3,9 @@ namespace kodeops\Prado\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CachedToken extends Model
+class CachedPin extends Model
 {
-    protected $table = 'prado_tokens';
+    protected $table = 'prado_pins';
     protected $fillable = [
         'pin',
         'hash',

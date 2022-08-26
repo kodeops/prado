@@ -1,7 +1,7 @@
 <?php
 namespace kodeops\Prado\Media;
 
-use kodeops\Prado\Models\CachedToken;
+use kodeops\Prado\Models\CachedPin;
 use Illuminate\Support\Facades\Cache;
 use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
@@ -161,7 +161,7 @@ class Token
                     'token_id' => $this->token_id,
                     'metadata' => $data,
                 ];
-                CachedToken::updateOrInsert(['pin' => $data['alias']], $cache);
+                CachedPin::updateOrInsert(['pin' => $data['alias']], $cache);
             break;
 
             default:
@@ -175,7 +175,7 @@ class Token
         //$params = collect($params)->only(['blockchain', 'contract', 'token_id', 'mode', 'width', 'height'])->toArray();
         switch ($this->cache_driver) {
             case 'mysql':
-                $cache_exists = CachedToken::where('hash', $this->cache_key)->first();
+                $cache_exists = CachedPin::where('hash', $this->cache_key)->first();
                 if ($cache_exists) {
                     return $cache_exists->metadata;
                 }
