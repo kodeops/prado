@@ -173,7 +173,7 @@ class Token
             break;
 
             default:
-                Cache::put("prado.{$this->cache_key}", $pin);
+                Cache::put("prado.{$this->cache_key}", $data);
             break;
         }
     }
