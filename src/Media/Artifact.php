@@ -14,7 +14,12 @@ class Artifact
         $this->artifact_alias = $artifact_alias;
     }
 
-    public function get(string $organisational_unit_alias, array $params)
+    public function data()
+    {
+        return $this->pradoRequest->post("api/1/artifact/{$this->artifact_alias}", []);
+    }
+
+    public function query(string $organisational_unit_alias, array $params)
     {
         $params['organisational_unit'] = $organisational_unit_alias;
         return $this->pradoRequest->post("api/1/artifacts", $params);

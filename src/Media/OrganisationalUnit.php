@@ -17,6 +17,6 @@ class OrganisationalUnit
 
     public function artifacts(array $params = [])
     {
-        return (new Media\Artifact)->get($this->organisational_unit_alias, $params);
+        return (new Media\Artifact)->query($this->organisational_unit_alias, $params);
     } 
 }
