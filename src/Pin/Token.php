@@ -15,6 +15,7 @@ class Token
     protected $height;
     protected $mode;
     protected $author;
+    protected $organisational_unit;
 
     protected $cache_driver;
     protected $cache_key;
@@ -110,6 +111,22 @@ class Token
         return $this;
     }
 
+    public function collection(string $collection)
+    {
+        return $this->orgunit($collection);
+    }
+
+    public function project(string $project)
+    {
+        return $this->orgunit($project);
+    }
+
+    private function orgunit(string $organisational_unit)
+    {
+        $this->organisational_unit = $organisational_unit;
+        return $this;
+    }
+
     private function resolveNft()
     {
         $params = [
@@ -129,6 +146,10 @@ class Token
 
         if ($this->height) {
             $params['height'] = $this->height;
+        }
+
+        if ($this->organisational_unit) {
+            $params['organisational_unit'] = $this->organisational_unit;
         }
 
         $this->cache_key = sha1(json_encode($params));
