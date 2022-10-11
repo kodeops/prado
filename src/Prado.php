@@ -45,6 +45,11 @@ class Prado
         }
     }
 
+    public static function preview()
+    {
+        return new Pin\Preview;
+    }
+
     /* Alias to support old calls */
     public static function nft(string $token_id)
     {

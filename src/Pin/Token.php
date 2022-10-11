@@ -23,7 +23,6 @@ class Token
     protected $method;
     protected $failsafe;
     protected $timeout;
-    protected $preview;
     protected $pradoRequest;
 
     public function __construct(string $token_id = null)
@@ -46,12 +45,6 @@ class Token
     public function timeout(int $timeout)
     {
         $this->timeout = $timeout;
-        return $this;
-    }
-
-    public function preview()
-    {
-        $this->preview = 1;
         return $this;
     }
 
@@ -153,10 +146,6 @@ class Token
 
         if ($this->height) {
             $params['height'] = $this->height;
-        }
-
-        if ($this->preview) {
-            $params['preview'] = $this->preview;
         }
 
         if ($this->organisational_unit) {
