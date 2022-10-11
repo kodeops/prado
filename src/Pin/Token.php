@@ -5,6 +5,7 @@ use kodeops\Prado\Models\CachedPin;
 use Illuminate\Support\Facades\Cache;
 use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
+use kodeops\Prado\Prado;
 
 class Token
 {
@@ -164,7 +165,7 @@ class Token
             ->get('api/1/pin/token', $params);
         if ($request->isError()) {
             if ($this->failsafe) {
-                return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
+                return Prado::PLACEHOLDER;
             }
 
             throw new PradoException("Error {$request->response('code')} processing request for token {$this->token_id} in contract {$this->contract} at {$this->blockchain} blockchain. Response: {$request->response('message')}");

@@ -7,6 +7,8 @@ use kodeops\Prado\Exceptions\PradoException;
 
 class Prado
 {
+    const PLACEHOLDER = "https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg";
+    
     public static function collection(string $collection_alias)
     {
         return new Media\OrganisationalUnit($collection_alias);

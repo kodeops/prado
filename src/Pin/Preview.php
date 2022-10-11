@@ -5,6 +5,7 @@ use kodeops\Prado\Models\CachedPin;
 use Illuminate\Support\Facades\Cache;
 use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
+use kodeops\Prado\Prado;
 
 class Preview
 {
@@ -60,7 +61,7 @@ class Preview
         return $this;
     }
 
-    private function resolveNft()
+    private function data(string $key = null)
     {
         $params = [
             'blockchain' => $this->blockchain,
@@ -73,14 +74,22 @@ class Preview
             ->get('api/1/token/preview', $params);
         if ($request->isError()) {
             if ($this->failsafe) {
-                return 'https://pradocdn.s3-eu-central-1.amazonaws.com/placeholder.jpg';
+                return Prado::PLACEHOLDER;
             }
 
             throw new PradoException("Error {$request->response('code')} processing request for token {$this->token_id} in contract {$this->contract} at {$this->blockchain} blockchain. Response: {$request->response('message')}");
         }
 
-        $token = $request->response('data');
+        $preview = $request->response('data')['preview'];
 
-        return $token['preview'];
+        if ($key) {
+            if (! isset($preview[$key])) {
+                throw new PradoException("Key {$key} not found}");
+            }
+
+            return $preview[$key];
+        }
+
+        return $preview;
     }
 }
