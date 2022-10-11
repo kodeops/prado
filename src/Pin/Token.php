@@ -49,9 +49,9 @@ class Token
         return $this;
     }
 
-    public function live(bool $live)
+    public function live()
     {
-        $this->live = $live;
+        $this->live = 1;
         return $this;
     }
 
@@ -156,7 +156,7 @@ class Token
         }
 
         if ($this->live) {
-            $params['live'] = 1;
+            $params['live'] = $this->live;
         }
 
         if ($this->organisational_unit) {
