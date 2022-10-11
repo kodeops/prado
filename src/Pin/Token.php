@@ -23,7 +23,7 @@ class Token
     protected $method;
     protected $failsafe;
     protected $timeout;
-    protected $live;
+    protected $preview;
     protected $pradoRequest;
 
     public function __construct(string $token_id = null)
@@ -49,9 +49,9 @@ class Token
         return $this;
     }
 
-    public function live()
+    public function preview()
     {
-        $this->live = 1;
+        $this->preview = 1;
         return $this;
     }
 
@@ -155,8 +155,8 @@ class Token
             $params['height'] = $this->height;
         }
 
-        if ($this->live) {
-            $params['live'] = $this->live;
+        if ($this->preview) {
+            $params['preview'] = $this->preview;
         }
 
         if ($this->organisational_unit) {
