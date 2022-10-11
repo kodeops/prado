@@ -71,6 +71,10 @@ class Preview
             'method' => $this->method,
         ];
 
+        if ($this->author) {
+            $params['author'] = $this->author;
+        }
+
         $request = $this->pradoRequest
             ->timeout($this->timeout)
             ->get('api/1/token/preview', $params);
