@@ -27,6 +27,7 @@ class Preview
 
     public function tokenId(string $token_id)
     {
+        $this->method = 'token_metadata';
         $this->token_id = $token_id;
         return $this;
     }
@@ -67,6 +68,7 @@ class Preview
             'blockchain' => $this->blockchain,
             'contract' => $this->contract,
             'token_id' => $this->token_id,
+            'method' => $this->method,
         ];
 
         $request = $this->pradoRequest
