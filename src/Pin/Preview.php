@@ -61,7 +61,7 @@ class Preview
         return $this;
     }
 
-    private function data(string $key = null)
+    public function data(string $key = null)
     {
         $params = [
             'blockchain' => $this->blockchain,
