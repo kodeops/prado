@@ -23,6 +23,7 @@ class Token
     protected $method;
     protected $failsafe;
     protected $timeout;
+    protected $live;
     protected $pradoRequest;
 
     public function __construct(string $token_id = null)
@@ -45,6 +46,12 @@ class Token
     public function timeout(int $timeout)
     {
         $this->timeout = $timeout;
+        return $this;
+    }
+
+    public function live(bool $live)
+    {
+        $this->live = $live;
         return $this;
     }
 
@@ -146,6 +153,10 @@ class Token
 
         if ($this->height) {
             $params['height'] = $this->height;
+        }
+
+        if ($this->live) {
+            $params['live'] = 1;
         }
 
         if ($this->organisational_unit) {
