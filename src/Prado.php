@@ -52,6 +52,11 @@ class Prado
         return new Pin\Preview;
     }
 
+    public static function thumbnail()
+    {
+        return new Pin\Thumbnail;
+    }
+
     /* Alias to support old calls */
     public static function nft(string $token_id)
     {
