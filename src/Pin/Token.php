@@ -17,6 +17,7 @@ class Token
     protected $mode;
     protected $author;
     protected $organisational_unit;
+    protected $queue;
 
     protected $cache_driver;
     protected $cache_key;
@@ -33,6 +34,7 @@ class Token
         $this->timeout = 180;
 
         // Default settings
+        $this->queue = '1';
         $this->mode = 'maintain_aspect_ratio';
         $this->setupCacheDriver();
     }
@@ -112,6 +114,12 @@ class Token
         return $this;
     }
 
+    public function queue(bool $queue)
+    {
+        $this->queue = $queue ? '1' : '0';
+        return $this;
+    }
+
     public function collection(string $collection)
     {
         return $this->orgunit($collection);
@@ -135,6 +143,7 @@ class Token
             'contract' => $this->contract,
             'token_id' => $this->token_id,
             'mode' => $this->mode,
+            'queue' => $this->queue,
         ];
 
         if ($this->author) {
