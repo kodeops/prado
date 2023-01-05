@@ -154,7 +154,7 @@ class Token
             'queue' => $this->queue,
         ];
 
-        if ($this->token_id) {
+        if (! is_null($this->token_id)) {
             $api_endpoint = 'api/1/pin/token';
             $params['token_id'] = $this->token_id;
             $params['blockchain'] = $this->blockchain;
