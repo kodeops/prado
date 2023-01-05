@@ -17,7 +17,12 @@ class Prado
     public static function project(string $project_alias)
     {
         return new Media\OrganisationalUnit($project_alias);
-    }    
+    }
+
+    public static function organisationalUnit(string $organisational_unit_alias)
+    {
+        return new Media\OrganisationalUnit($organisational_unit_alias);
+    }
 
     public static function artifact(string $artifact_alias)
     {
