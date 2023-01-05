@@ -38,6 +38,7 @@ class Prado
             break;
 
             case 'marketplace_url':
+                return new Pin\Token();
             break;
 
             case 'url':

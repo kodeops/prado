@@ -17,6 +17,7 @@ class Token
     protected $mode;
     protected $author;
     protected $organisational_unit;
+    protected $marketplace_url;
     protected $queue;
 
     protected $cache_driver;
@@ -39,6 +40,8 @@ class Token
         $this->setupCacheDriver();
     }
 
+    /* Public setters */
+
     public function tokenId(string $token_id)
     {
         $this->token_id = $token_id;
@@ -55,26 +58,6 @@ class Token
     {
         $this->failsafe = $failsafe;
         return $this;
-    }
-
-    /* Alias to support old calls */
-    public function token()
-    {
-        return $this->metadata();
-    }
-
-    public function metadata()
-    {
-        return $this->resolveNft();
-    }
-
-    public function url()
-    {
-        switch ($this->method) {
-            case 'nft':
-                return $this->resolveNft()['url'];
-            break;
-        }
     }
 
     public function blockchain($blockchain)
@@ -114,6 +97,12 @@ class Token
         return $this;
     }
 
+    public function marketplaceUrl(string $marketplace_url)
+    {
+        $this->marketplace_url = $marketplace_url;
+        return $this;
+    }
+
     public function queue(bool $queue)
     {
         $this->queue = $queue ? '1' : '0';
@@ -130,6 +119,28 @@ class Token
         return $this->orgunit($project);
     }
 
+    /* Alias to support old calls */
+    public function token()
+    {
+        return $this->metadata();
+    }
+
+    public function metadata()
+    {
+        return $this->resolveNft();
+    }
+
+    public function url()
+    {
+        switch ($this->method) {
+            case 'nft':
+                return $this->resolveNft()['url'];
+            break;
+        }
+    }
+
+    /* Private Methods */
+
     private function orgunit(string $organisational_unit)
     {
         $this->organisational_unit = $organisational_unit;
@@ -139,12 +150,23 @@ class Token
     private function resolveNft()
     {
         $params = [
-            'blockchain' => $this->blockchain,
-            'contract' => $this->contract,
-            'token_id' => $this->token_id,
             'mode' => $this->mode,
             'queue' => $this->queue,
         ];
+
+        if ($this->token_id) {
+            $api_endpoint = 'api/1/pin/token';
+            $params['token_id'] = $this->token_id;
+            $params['blockchain'] = $this->blockchain;
+            $params['contract'] = $this->contract;
+        } else if ($this->marketplace_url) {
+            $api_endpoint = 'api/1/pin/marketplace';
+            $params['marketplace_url'] = $this->marketplace_url;
+        }
+
+        if (! isset($api_endpoint)) {
+            throw new PradoException("Invalid pinning request params");
+        }
 
         if ($this->author) {
             $params['author'] = $this->author;
@@ -171,7 +193,7 @@ class Token
 
         $request = $this->pradoRequest
             ->timeout($this->timeout)
-            ->get('api/1/pin/token', $params);
+            ->get($api_endpoint, $params);
         if ($request->isError()) {
             if ($this->failsafe) {
                 return Prado::PLACEHOLDER;
