@@ -62,7 +62,7 @@ class Token
         return $this->token['creators_urls'];
     }
 
-    public function marketplaceUrl() : array
+    public function marketplaceUrl()
     {
         return $this->token['marketplace']['token_url'] ?? null;
     }
