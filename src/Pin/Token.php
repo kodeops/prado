@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
 use kodeops\Prado\Prado;
+use kodeops\Prado\Models\Pin;
 
 class Token
 {
@@ -117,6 +118,11 @@ class Token
     public function project(string $project)
     {
         return $this->orgunit($project);
+    }
+
+    public function process()
+    {
+        return new Pin($this->resolveNft());
     }
 
     /* Alias to support old calls */
