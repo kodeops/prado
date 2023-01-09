@@ -168,6 +168,10 @@ class Token
             throw new PradoException("Invalid pinning request params");
         }
 
+        if (! $this->author) {
+            $this->author = env('APP_NAME');   
+        }
+
         if ($this->author) {
             $params['author'] = $this->author;
         }
