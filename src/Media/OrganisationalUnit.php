@@ -4,6 +4,7 @@ namespace kodeops\Prado\Media;
 use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\Media;
 use kodeops\Prado\PradoRequest;
+use kodeops\Prado\Models\Artifact;
 
 class OrganisationalUnit
 {
@@ -17,6 +18,14 @@ class OrganisationalUnit
 
     public function artifacts(array $params = [])
     {
-        return $this->pradoRequest->get("api/1/orgunit/{$this->organisational_unit_alias}/artifacts", $params);
+        $artifacts = $this->pradoRequest->get("api/1/orgunit/{$this->organisational_unit_alias}/artifacts", $params);
+
+        if ($artifacts->isError()) {
+            return $artifacts;
+        }
+        
+        return collect($artifacts->response('data', 'artifacts'))->map(function($artifact){
+            return new Artifact($artifact);
+        })->toArray();
     } 
 }
