@@ -13,8 +13,8 @@ class Artifact
     public function __construct(array $artifact)
     {
         $this->artifact = $artifact;
-        $this->pin = isset($artifact['pin']) ? new Artifact($artifact['pin']) : null;
-        $this->token = isset($artifact['token']) ? new Artifact($artifact['token']) : null;
+        $this->pin = isset($artifact['pin']) ? new Pin($artifact['pin']) : null;
+        $this->token = isset($artifact['token']) ? new Token($artifact['token']) : null;
     }
 
     /* Model Properties */
