@@ -24,8 +24,10 @@ class OrganisationalUnit
             return $artifacts;
         }
         
-        return collect($artifacts->response('data', 'artifacts'))->map(function($artifact){
+        $artifacts = collect($artifacts->response('data', 'artifacts'))->map(function($artifact){
             return new Artifact($artifact);
         })->toArray();
+
+        return success("Fetched.")->data(compact('artifacts'));
     } 
 }
