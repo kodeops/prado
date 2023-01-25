@@ -34,6 +34,11 @@ class Artifact
         return $this->artifact['url'];
     }
 
+    public function profile()
+    {
+        return $this->artifact['profile'];
+    }
+
     public function description()
     {
         return $this->artifact['description'];

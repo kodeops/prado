@@ -34,6 +34,11 @@ class Pin
         return $this->pin['url'];
     }
 
+    public function profile()
+    {
+        return $this->pin['profile'];
+    }
+
     public function cdn()
     {
         return $this->pin['cdn'];
