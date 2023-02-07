@@ -62,6 +62,11 @@ class Token
         return $this->token['creators_urls'];
     }
 
+    public function gatewayUrl()
+    {
+        return $this->token['gateway_url'];
+    }
+
     public function marketplaceUrl()
     {
         return $this->token['marketplace']['token_url'] ?? null;
