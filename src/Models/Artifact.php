@@ -54,6 +54,11 @@ class Artifact
         return $this->artifact['metadata'];
     }
 
+    public function gatewayUrl()
+    {
+        return $this->artifact['gateway_url'];
+    }
+
     public function createdAt()
     {
         return $this->artifact['created_at'];
