@@ -214,6 +214,12 @@ class Token
 
         $token = $request->response('data');
 
+        if (! is_null($params['marketplace_url'])) {
+            $this->token_id = $token['token']['token_id'];
+            $this->contract = $token['token']['contract'];
+            $this->blockchain = $token['token']['blockchain'];
+        }
+
         $this->cachePin($token);
 
         return $token;
