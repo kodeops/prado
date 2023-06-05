@@ -7,7 +7,6 @@ use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
 use kodeops\Prado\Prado;
 use kodeops\Prado\Models\Pin;
-use kodeops\Prado\Prado;
 
 class Token
 {
