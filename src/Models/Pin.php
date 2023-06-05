@@ -46,12 +46,12 @@ class Pin
 
     public function thumbnails()
     {
-        return $this->thumbnails;
+        return $this->pin['thumbnails'];
     }
 
     public function thumbnail(string $size)
     {
-        return $this->thumbnails[$size] ?? null;
+        return $this->thumbnails()[$size] ?? null;
     }
 
     public function width()
