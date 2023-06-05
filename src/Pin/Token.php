@@ -7,6 +7,7 @@ use kodeops\Prado\Exceptions\PradoException;
 use kodeops\Prado\PradoRequest;
 use kodeops\Prado\Prado;
 use kodeops\Prado\Models\Pin;
+use kodeops\Prado\Prado;
 
 class Token
 {
@@ -230,10 +231,10 @@ class Token
                     'token_id' => $this->token_id,
                     'metadata' => $pin,
                 ];
+
                 $cachedPin = CachedPin::where('pin', $pin['alias'])->first();
                 if ($cachedPin) {
-                    // This is a tricky situation.
-                    // According to the hash strategy, a
+                    // Update pin
                     $cachedPin->update($pin_params);
                 } else {
                     $pin_params['pin'] = $pin['alias'];
@@ -251,7 +252,10 @@ class Token
     {
         switch ($this->cache_driver) {
             case 'mysql':
-                $cache_exists = CachedPin::where('hash', $this->cache_key)->first();
+                $cache_exists = CachedPin::where('hash', $this->cache_key)
+                    ->where('metadata->thumbnails->large', '!=', Prado::PLACEHOLDER)
+                    ->where('metadata->thumbnails->small', '!=', Prado::PLACEHOLDER)
+                    ->first();
                 if ($cache_exists) {
                     return $cache_exists->metadata;
                 }
