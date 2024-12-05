@@ -81,4 +81,24 @@ class Token
     {
         return $this->token['marketplace']['twitter'] ?? null;
     }
+
+    public function toArray()
+    {
+        return [
+            'token_id' => $this->tokenId(),
+            'blockchain' => $this->blockchain(),
+            'contract' => $this->contract(),
+            'name' => $this->name(),
+            'description' => $this->description(),
+            'mime' => $this->mime(),
+            'creators' => $this->creators(),
+            'creatorsNames' => $this->creatorsNames(),
+            'creatorsAttr' => $this->creatorsAttr(),
+            'creatorsUrls' => $this->creatorsUrls(),
+            'gatewayUrl' => $this->gatewayUrl(),
+            'marketplaceUrl' => $this->marketplaceUrl(),
+            'marketplaceName' => $this->marketplaceName(),
+            'marketplaceTwitter' => $this->marketplaceTwitter(),
+        ];
+    }
 }

@@ -84,6 +84,24 @@ class Pin
         return $this->pin['created_at'];
     }
 
+    public function toArray()
+    {
+        return [
+            'alias' => $this->alias(),
+            'url' => $this->url(),
+            'profile' => $this->profile(),
+            'cdn' => $this->cdn(),
+            'thumbnails' => $this->thumbnails(),
+            'width' => $this->width(),
+            'height' => $this->height(),
+            'size' => $this->size(),
+            'mode' => $this->mode(),
+            'source' => $this->source(),
+            'createdAt' => $this->createdAt(),
+            'token' => $this->token()->toArray(),
+        ];
+    }
+
     /* Model Relationships */
 
     public function token()
